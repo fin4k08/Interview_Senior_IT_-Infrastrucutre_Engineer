@@ -41,6 +41,8 @@ Describe "OpsGenie Status Script" {
             $output | Should -Match "Issue: Issue with website login"
             $output | Should -Match "Issue: Alerts are very slow to send"
             $output | Should -Match "Issue: Some users receiving duplicate alerts"
+
+            Write-Host "$output"
         }
 
         It "Should include the overall system status in the final message" {
@@ -64,6 +66,7 @@ Status: resolved
 "@
 
             $slackMessage | Should -Match "Current systems status: Partially Degraded"
+            Write-Host "$slackMessage"
         }
 
     }
