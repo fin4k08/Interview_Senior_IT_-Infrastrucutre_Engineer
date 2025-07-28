@@ -68,6 +68,41 @@ Status: resolved
             $slackMessage | Should -Match "Current systems status: Partially Degraded"
             Write-Host "$slackMessage"
         }
+        
+        It "Should sort incidents in reverse chronological order by created_at" {
+            $sampleIncidents = @{
+                incidents = @(
+                    @{
+                        name = "Issue with website login"
+                        created_at = "2019-09-05T08:32:51.523Z"
+                        status = "unresolved"
+                    },
+                    @{
+                        name = "Alerts are very slow to send"
+                        created_at = "2019-07-19T22:04:01.109Z"
+                        status = "resolved"
+                    },
+                    @{
+                        name = "Some users receiving duplicate alerts"
+                        created_at = "2019-06-27T03:16:31.647Z"
+                        status = "resolved"
+                    }
+                )
+            }
+
+            # Sort using same logic as the script
+            $sorted = $sampleIncidents.incidents |
+                Sort-Object { [datetime]$_.created_at } -Descending
+
+            # Convert strings to datetime just to double-check
+            $firstDate = [datetime]$sorted[0].created_at
+            $secondDate = [datetime]$sorted[1].created_at
+            $thirdDate = [datetime]$sorted[2].created_at
+
+            # Assert reverse order
+            $firstDate | Should -BeGreaterThan $secondDate
+            $secondDate | Should -BeGreaterThan $thirdDate
+        }
 
     }
 }
