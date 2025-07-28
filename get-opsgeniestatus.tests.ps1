@@ -26,7 +26,7 @@ Describe "OpsGenie Status Script" {
                 )
             }
 
-            $incidents = $sampleIncidents.incidents | Select-Object -First 3
+            $incidents = $sampleIncidents.incidents | Sort-Object { [datetime]$_.created_at } -Descending  | Select-Object -First 3
 
             Write-Host "Number of incidents: $($incidents.Count)"  # Debug confirmation
 

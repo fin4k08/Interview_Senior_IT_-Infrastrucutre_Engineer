@@ -16,7 +16,7 @@ catch {
 # Get recent incidents
 try {
     $incidentsResponse = Invoke-RestMethod -Uri $incidentUrl -Method Get
-    $recentIncidents = $incidentsResponse.incidents | Select-Object -First 3
+    $recentIncidents = $incidentsResponse.incidents | Sort-Object { [datetime]$_.created_at } -Descending | Select-Object -First 3
 }
 catch {
     write-error "Failed to retrieve incidents: $_"
